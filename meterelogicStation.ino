@@ -77,44 +77,59 @@ Serial.println("Falha na inicialização do SD Card.");
 
 
 void loop() {
-  myFile = SD.open("estacao.txt", FILE_WRITE);
   uint8_t wait_for_response_ms = 1000;
   char* fivetmvalue = fivetmSensor(); // valor do 5tm 2-5 umidade 7-10 temp
   int moistureSoil = soilMoistureSensor(); //valor do sensor capacitive soil moisture sensor v1.2, umidade do solo
   int temperatureSoil = temperatureSoilSensor(); //valor do sensor DS18B20, temperatura do solo
   int airHumidity = dht.readHumidity(); //valor do sensor dht22, humidade do ar
   int airTemperature = dht.readTemperature(); //valor do sensor dht22, temperatura do ar
-  
+  myFile = SD.open("estacao.txt", FILE_WRITE);
 
-  myFile.print("Umidade do solo: ");
-  myFile.println(moistureSoil);
-  myFile.print("Temperatura do solo: ");
-  myFile.print(temperatureSoil);
-  myFile.println("°C");
   
-  myFile.println("Umidade 5tm: ");
+//myFile = SD.open("test.txt", FILE_WRITE);
+
+  // if the file opened okay, write to it:
+  if (myFile) {  //tenta usar esse IF p debugar e ver se ta escrevendo mesmo
+    Serial.print("Writing to test.txt...");
+    
+  Serial.print("Umidade do solo: ");
+  Serial.println(moistureSoil);
+  Serial.print("Temperatura do solo: ");
+  Serial.print(temperatureSoil);
+  Serial.println("°C");
+  
+  Serial.println("Umidade 5tm: ");
   for (int i=2; i<6; i++){
       if (i==5){
-          myFile.println( fivetmvalue[i]);
+          Serial.println( fivetmvalue[i]);
       }
       else
-          myFile.print( fivetmvalue[i]);
+          Serial.print( fivetmvalue[i]);
       }
-  myFile.println("Temperatura 5tm: ");    
+  Serial.println("Temperatura 5tm: ");    
   for (int i=7; i<11; i++){
       if (i==10){
-          myFile.println( fivetmvalue[i]);
+          Serial.println( fivetmvalue[i]);
       }
       else
-          myFile.print( fivetmvalue[i]);
+          Serial.print( fivetmvalue[i]);
       }
 
-  myFile.print("Umidade do ar: ");
-  myFile.println(airHumidity);
-  myFile.print("Temperatura do ar: ");
-  myFile.print(airTemperature);
-  myFile.println("°C");
-  
-myFile.close();
-delay(5000);
+  Serial.print("Umidade do ar: ");
+  Serial.println(airHumidity);
+  Serial.print("Temperatura do ar: ");
+  Serial.print(airTemperature);
+  Serial.println("°C");
+
+  Serial.println("");
+    // close the file:
+    myFile.close();
+    Serial.println("done.");
+  }
+  else {
+    // if the file didn't open, print an error:
+    Serial.println("error opening test.txt");
+    myFile.println("error opening test.txt");
+  }
+  delay(5000);
 }
