@@ -77,14 +77,14 @@ Serial.println("Falha na inicialização do SD Card.");
 
 
 void loop() {
-
+  myFile = SD.open("estacao.txt", FILE_WRITE);
   uint8_t wait_for_response_ms = 1000;
   char* fivetmvalue = fivetmSensor(); // valor do 5tm 2-5 umidade 7-10 temp
   int moistureSoil = soilMoistureSensor(); //valor do sensor capacitive soil moisture sensor v1.2, umidade do solo
   int temperatureSoil = temperatureSoilSensor(); //valor do sensor DS18B20, temperatura do solo
   int airHumidity = dht.readHumidity(); //valor do sensor dht22, humidade do ar
   int airTemperature = dht.readTemperature(); //valor do sensor dht22, temperatura do ar
-  myFile = SD.open("estacao.txt", FILE_WRITE);
+  
 
   myFile.print("Umidade do solo: ");
   myFile.println(moistureSoil);
